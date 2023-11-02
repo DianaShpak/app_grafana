@@ -1,0 +1,16 @@
+cloud-config
+users:
+  - name: devops
+    groups: users, admin
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    shell: /bin/bash
+    ssh_authorized_keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDJH/cd/F1Ehk7HFbopIh0cgyNtNs1/BVTExbVlQPCCjmJyRYx1Ze6jPlvPnWg4aoiCb+87lI513Q65wurpiu6q/V+XKIYOSuXE6VNM4Nsl6yb2gSkeI0eoaea6WX3mkhvsjbJ1KcgrqBH7tXuiEKpIXNnclTx/Vr2vX3NuMQavBI9beQ7lKGWcRp2WHk3W1FUcSv8NQ3F/atIqNzNH9CfgQ22sars40QK5Ky/X/3rfRFCpwzoYaMtr+PsrJRFDx4uZPEu4UEZqrpiFWa+1PmyxjCZ7ujQAAUoSiwyXBbqkUKtRKD2xpi/uARVG9pxqf7bnONT6V9tyForARci4kBlG4Cc9dXXRVtBMS2yexsmpQTc/GOXpgaskS6cF4CC831eGguq5UTl2yXGPF4wQOQHqyWkzpZvEykUXPGl95kavN81FSlcFjB1X0D03qb8OMlvai0GNortcxSLqroo4cDm0Nyhh5ALHOkKirX4u1TvTv1vbcfKJNu789jPjg4Sk/m5tSS/EAgDwThOCktyKLn/jCaVMngqYjkflfJvsjkr8gAb95sRM4/DLZiQgySwr1IZzcaeYB6cfX0dAfMi0rC0hryVFUG4TlYEPJ5DeO6ga0g6PoyAZQsZpkvjpzZflLyikNhcX7bcex9cp9quuL9qTOTTcV1qdxGdrP4i35CuE5Q== petro.chyzhevskyi@pragmaticplay.com
+package_update: true
+package_upgrade: true
+packages:
+  - nginx
+  - fail2ban
+  - ufw
+runcmd:
+  - ls

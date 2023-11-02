@@ -1,0 +1,80 @@
+---
+- debug: var=hostvars['app-server-0'].ansible_host
+  tags:
+    - grafana
+- debug: var=hostvars['grafana-server-0'].ansible_host
+  tags:
+    - grafana
+- name: Create consul conf dir
+  file:
+    path: /tmp/conf
+    state: directory
+  tags:
+    - grafana
+- name: Create consul data dir
+  file:
+    path: /tmp/data
+    state: directory
+  tags:
+    - grafana
+
+- name: Add consul config
+  template:
+    src: "prometheus.yml.j2"
+    dest: "/tmp/conf/prometheus.yml"
+  tags:
+    - grafana
+
+- name: Change permission on server.hcl.j2 file
+  file:
+    path: /tmp/conf/prometheus.yml
+    state: file
+    owner: root
+    group: root
+    mode: 0777
+
+- name: Change permission on data
+  file:
+    path: /tmp/data
+    state: directory
+    owner: root
+    group: root
+    mode: 0777
+
+- name: Change permission on conf
+  file:
+    path: /tmp/conf
+    state: directory
+    owner: root
+    group: root
+    mode: 0777
+
+- name: Restart a prometheus
+  docker_container:
+    name: prometheus
+    image: prom/prometheus:latest
+    state: started
+    volumes:
+      - /tmp/conf:/etc/prometheus
+      - /tmp/data:/prometheus
+    command: [
+      "--config.file=/etc/prometheus/prometheus.yml",
+      "--storage.tsdb.path=/prometheus",
+      "--storage.tsdb.retention=200h"
+    ]
+    ports:
+      - "9090:9090"
+    restart: yes
+  tags:
+    - grafana
+
+- name: Restart a grafana
+  docker_container:
+    name: grafana
+    image: grafana/grafana:latest
+    state: started
+    ports:
+      - "3000:3000"
+    restart: yes
+  tags:
+    - grafana
