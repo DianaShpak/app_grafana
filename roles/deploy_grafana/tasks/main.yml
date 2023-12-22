@@ -49,7 +49,7 @@
     group: root
     mode: 0777
 
-- name: Restart a prometheus
+- name: Start a prometheus
   docker_container:
     name: prometheus
     image: prom/prometheus:latest
@@ -71,7 +71,7 @@
 - name: Restart a grafana
   docker_container:
     name: grafana
-    image: grafana/grafana:latest
+    image: grafana/grafana:latest-ubuntu
     state: started
     ports:
       - "3000:3000"

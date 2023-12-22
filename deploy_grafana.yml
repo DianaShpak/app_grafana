@@ -1,5 +1,14 @@
 ---
 - hosts:
+    - app_type_http
+  user: root
+  become: true
+  become_method: sudo
+  #  gather_facts: false
+  roles:
+    - deploy_exporter
+
+- hosts:
     - app_type_grafana
   user: root
   become: true
@@ -7,21 +16,10 @@
 #  gather_facts: false
   roles:
     - docker_install
-
-- hosts:
-    - app_type_grafana
-  user: root
-  become: true
-  become_method: sudo
-  #  gather_facts: false
-  roles:
+    - deploy_influxdb
     - deploy_grafana
 
 - hosts:
-    - app_type_http
-  user: root
-  become: true
-  become_method: sudo
-#  gather_facts: false
+    - localhost
   roles:
-    - deploy_exporter
+    - configure_grafana_dashboards

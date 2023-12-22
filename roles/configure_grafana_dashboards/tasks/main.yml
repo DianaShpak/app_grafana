@@ -1,0 +1,67 @@
+---
+- name: Create influxdb datasource
+  community.grafana.grafana_datasource:
+    name: "InfluxDB"
+    grafana_url: "http://{{hostvars['grafana-server-0'].ansible_host}}:3000"
+    grafana_user: "admin"
+    grafana_password: "admin"
+    org_id: "1"
+    ds_type: "influxdb"
+    ds_url: "http://{{hostvars['grafana-server-0'].ansible_host}}:8086"
+    database: "gatlingdb"
+  ignore_errors: true
+
+- name: create prometheus datasource
+  community.grafana.grafana_datasource:
+    name: Prometheus
+    ds_type: prometheus
+    url: "http://{{hostvars['grafana-server-0'].ansible_host}}:3000"
+    ds_url: "http://{{hostvars['grafana-server-0'].ansible_host}}:9090"
+    access: proxy
+    tls_skip_verify: true
+  ignore_errors: true
+
+- name: Import Grafana dashboard node_exporter
+  community.grafana.grafana_dashboard:
+    grafana_url: "http://{{hostvars['grafana-server-0'].ansible_host}}:3000"
+    grafana_user: "admin"
+    grafana_password: "admin"
+    state: present
+    commit_message: Updated by ansible
+    overwrite: yes
+    path: "{{playbook_dir}}/dashboards/node_exporter.json"
+  ignore_errors: true
+
+
+- name: Import Grafana dashboard
+  community.grafana.grafana_dashboard:
+    grafana_url: "http://{{hostvars['grafana-server-0'].ansible_host}}:3000"
+    grafana_user: "admin"
+    grafana_password: "admin"
+    state: present
+    commit_message: Updated by ansible
+    overwrite: yes
+    path: "{{playbook_dir}}/dashboards/gatling-dashboard.json"
+  ignore_errors: true
+
+- name: Import Grafana dashboard trend2
+  community.grafana.grafana_dashboard:
+    grafana_url: "http://{{hostvars['grafana-server-0'].ansible_host}}:3000"
+    grafana_user: "admin"
+    grafana_password: "admin"
+    state: present
+    commit_message: Updated by ansible
+    overwrite: yes
+    path: "{{playbook_dir}}/dashboards/gatling-report-trend2.json"
+  ignore_errors: true
+
+- name: Import Grafana dashboard report_rev3
+  community.grafana.grafana_dashboard:
+    grafana_url: "http://{{hostvars['grafana-server-0'].ansible_host}}:3000"
+    grafana_user: "admin"
+    grafana_password: "admin"
+    state: present
+    commit_message: Updated by ansible
+    overwrite: yes
+    path: "{{playbook_dir}}/dashboards/grafana-report_rev3.json"
+  ignore_errors: true

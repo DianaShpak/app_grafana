@@ -23,7 +23,7 @@ data "hcloud_ssh_key" "ssh_key" {
   fingerprint = "c5:e7:80:f0:ed:07:3d:e3:97:19:fa:30:b0:7f:d5:e6"
 }
 
-# Create Debian 11 server
+
 resource "hcloud_server" "grafana" {
   count       = var.instances_grafana
   name        = "grafana-server-${count.index}"
