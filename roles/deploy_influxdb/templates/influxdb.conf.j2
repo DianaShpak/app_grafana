@@ -1,0 +1,48 @@
+[meta]
+  dir = "/var/lib/influxdb/meta"
+
+[data]
+  dir = "/var/lib/influxdb/data"
+  engine = "tsm1"
+  wal-dir = "/var/lib/influxdb/wal"
+
+[[graphite]]
+# Determines whether the graphite endpoint is enabled.
+# Determines whether the graphite endpoint is enabled.
+enabled = true
+database = "gatlingdb"
+# retention-policy = ""
+bind-address = ":2003"
+protocol = "tcp"
+# consistency-level = "one"
+templates = [
+  "gatling.*.users.*.*      measurement.simulation.measurement.request.field",
+  "gatling.*.*.*.*.*.*   measurement.simulation.group1.group2.request.status.field   group=2",
+  "gatling.*.*.*.*.*   measurement.simulation.group1.request.status.field   group=1",
+  "gatling.*.*.*.*   measurement.simulation.request.status.field   group=0",
+
+  "v2.gatling.*.*.*.*.users.*.*  .measurement.run.region.userCount.simulation.measurement.request.field",
+  "v2.gatling.*.*.*.*.*.*.*.*.*  .measurement.run.region.userCount.simulation.group1.group2.request.status.field   group=2",
+  "v2.gatling.*.*.*.*.*.*.*.*  .measurement.run.region.userCount.simulation.group1.request.status.field   group=1",
+  "v2.gatling.*.*.*.*.*.*.*  .measurement.run.region.userCount.simulation.request.status.field   group=0",
+]
+
+# These next lines control how batching works. You should have this enabled
+# otherwise you could get dropped metrics or poor performance. Batching
+# will buffer points in memory if you have many coming in.
+
+# Flush if this many points get buffered
+batch-size = 5000
+
+# number of batches that may be pending in memory
+batch-pending = 10
+
+# Flush at least this often even if we haven't hit buffer limit
+batch-timeout = "10s"
+
+### This string joins multiple matching 'measurement' values providing more control over the final measurement name.
+separator = "."
+
+### Default tags that will be added to all metrics.  These can be overridden at the template level
+### or by tags extracted from metric
+# tags = ["region=us-east", "zone=1c"]
